@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  smartgym-db:
+    image: postgres:15-alpine
+    container_name: smartgym_postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: smartgym_bd
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  reservas-service:
+    build: .
+    container_name: smartgym_reservas_app
+    ports:
+      - "8081:8081"
+    depends_on:
+      - smartgym-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://smartgym-db:5432/smartgym_bd
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
+
+volumes:
+  postgres_data:
