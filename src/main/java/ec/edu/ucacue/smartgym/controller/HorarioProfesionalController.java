@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import ec.edu.ucacue.smartgym.dto.HorarioProfesionalRequest;
 
 @RestController
 @RequestMapping("/api/horarios")
@@ -17,5 +18,12 @@ public class HorarioProfesionalController {
     @GetMapping("/profesional/{id}")
     public ResponseEntity<List<HorarioResponse>> obtenerPorProfesional(@PathVariable Long id) {
         return ResponseEntity.ok(service.obtenerPorProfesional(id));
+    }
+    
+
+    @PostMapping
+    public ResponseEntity<String> crear(@RequestBody HorarioProfesionalRequest horarioProfesionalRequest) {
+        service.guardar(horarioProfesionalRequest); 
+        return ResponseEntity.ok("Horario guardado correctamente");
     }
 }

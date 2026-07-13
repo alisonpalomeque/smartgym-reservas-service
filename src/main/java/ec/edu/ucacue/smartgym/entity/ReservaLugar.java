@@ -15,7 +15,7 @@ public class ReservaLugar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long res_lug_id;
-
+    private long lug_id;
     private Long usu_id;
 
     @Enumerated(EnumType.STRING)
@@ -23,4 +23,6 @@ public class ReservaLugar {
     private EstadoReserva res_lug_estado;
 
     private LocalDateTime res_lug_fecha_creacion;
+
+    
 }

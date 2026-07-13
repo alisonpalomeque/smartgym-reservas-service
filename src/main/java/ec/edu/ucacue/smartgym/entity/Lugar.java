@@ -25,4 +25,5 @@ public class Lugar {
     private LocalTime lug_hora_inicio;
     private LocalTime lug_hora_fin;
     private Integer lug_cupos_disponibles;
+    
 }

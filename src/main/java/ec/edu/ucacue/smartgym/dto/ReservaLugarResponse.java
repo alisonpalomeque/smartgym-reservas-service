@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class ReservaLugarResponse {
     private Long res_lug_id;
     private Long usu_id;
+    private Long lug_id;
     private EstadoReserva res_lug_estado;
     private LocalDateTime res_lug_fecha_creacion;
     private String mensaje; 

@@ -48,6 +48,7 @@ public class ReservaLugarServiceImpl implements ReservaLugarService {
 
         ReservaLugar reserva = ReservaLugar.builder()
                 .usu_id(request.getUsu_id())
+                .lug_id(request.getLug_id())
                 .res_lug_estado(EstadoReserva.PENDIENTE)
                 .res_lug_fecha_creacion(LocalDateTime.now())
                 .build();
@@ -57,6 +58,7 @@ public class ReservaLugarServiceImpl implements ReservaLugarService {
         return ReservaLugarResponse.builder()
                 .res_lug_id(saved.getRes_lug_id())
                 .usu_id(saved.getUsu_id())
+                .lug_id(saved.getLug_id())
                 .res_lug_estado(saved.getRes_lug_estado())
                 .res_lug_fecha_creacion(saved.getRes_lug_fecha_creacion())
                 .mensaje("Reserva realizada con éxito")
@@ -69,6 +71,7 @@ public class ReservaLugarServiceImpl implements ReservaLugarService {
             .map(reserva -> ReservaLugarResponse.builder()
                 .res_lug_id(reserva.getRes_lug_id())
                 .usu_id(reserva.getUsu_id())
+                .lug_id(reserva.getLug_id())
                 .res_lug_estado(reserva.getRes_lug_estado())
                 .res_lug_fecha_creacion(reserva.getRes_lug_fecha_creacion())
                 .mensaje("Reserva encontrada")
@@ -82,6 +85,7 @@ public class ReservaLugarServiceImpl implements ReservaLugarService {
             .map(reserva -> ReservaLugarResponse.builder()
                 .res_lug_id(reserva.getRes_lug_id())
                 .usu_id(reserva.getUsu_id())
+                .lug_id(reserva.getLug_id())
                 .res_lug_estado(reserva.getRes_lug_estado())
                 .res_lug_fecha_creacion(reserva.getRes_lug_fecha_creacion())
                 .build())

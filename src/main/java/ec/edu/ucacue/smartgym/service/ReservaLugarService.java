@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ReservaLugarService {
     ReservaLugarResponse crearReserva(ReservaLugarRequest request);
-    ReservaLugarResponse buscarPorId(Long id);
     List<ReservaLugarResponse> listarTodas();
+    ReservaLugarResponse buscarPorId(Long id);
 }

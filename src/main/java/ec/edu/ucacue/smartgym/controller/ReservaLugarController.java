@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ec.edu.ucacue.smartgym.dto.ReservaLugarResponse;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/reservas-lugar")
@@ -15,18 +16,21 @@ public class ReservaLugarController {
     @Autowired
     private ReservaLugarService service;
 
-    @GetMapping
-    public ResponseEntity<List<ReservaLugarResponse>> listarTodas() {
-        return ResponseEntity.ok(service.listarTodas());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ReservaLugarResponse> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(service.buscarPorId(id));
-    }
-
     @PostMapping
     public ResponseEntity<ReservaLugarResponse> crearReserva(@RequestBody ReservaLugarRequest request) {
+       
         return ResponseEntity.ok(service.crearReserva(request));
+
     }
+   
+@GetMapping("/{id}")
+public ResponseEntity<ReservaLugarResponse> obtenerPorId(@PathVariable Long id) {
+    return ResponseEntity.ok(service.buscarPorId(id));
+}
+
+    @GetMapping
+public ResponseEntity<List<ReservaLugarResponse>> listarReservas() {
+    return ResponseEntity.ok(service.listarTodas());
+}
+
 }
