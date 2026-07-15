@@ -42,6 +42,7 @@ public void guardar(HorarioProfesionalRequest request) {
     
     // Asignación del ID del profesional
     horario.setMed_usu_id(request.getProfesional_id());
+
     
     // Aquí usamos los métodos que existen en tu DTO:
     if (request.getHor_fecha_inicio() != null) {
@@ -54,7 +55,8 @@ public void guardar(HorarioProfesionalRequest request) {
     
     horario.setHor_estado(true);
     horario.setHor_fecha_creacion(java.time.LocalDateTime.now());
-    
+    horario.setHor_duracion_cita(request.getHor_duracion_cita());
+    horario.setHor_dia_semana(request.getHor_dia_semana());
     repository.save(horario);
 }
 }

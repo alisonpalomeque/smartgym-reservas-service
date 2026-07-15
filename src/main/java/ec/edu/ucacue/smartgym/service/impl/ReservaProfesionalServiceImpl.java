@@ -44,6 +44,9 @@ public class ReservaProfesionalServiceImpl implements ReservaProfesionalService 
         reserva.setRes_fecha(request.getFecha_reserva().toLocalDate());
         reserva.setRes_comentario(request.getRes_comentario());
         reserva.setRes_estado(EstadoReserva.PENDIENTE);
+        reserva.setRes_hora_inicio(request.getFecha_reserva().toLocalTime());
+        reserva.setRes_hora_fin(request.getRes_hora_fin());
+        reserva.setRes_tipo(request.getRes_tipo());
 
         ReservaProfesional guardada = repository.save(reserva);
 
