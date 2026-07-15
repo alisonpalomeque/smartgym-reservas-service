@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public interface ReservaLugarRepository extends JpaRepository<ReservaLugar, Long> {
 
-    @Query("SELECT r FROM ReservaLugar r WHERE r.usu_id = :usu_id")
-    List<ReservaLugar> findByUsu_id(@Param("usu_id") Long usu_id);
+    @Query("SELECT r FROM ReservaLugar r WHERE r.per_id = :per_id")
+    List<ReservaLugar> findByPer_id(Long per_id);
 
     @Query("SELECT r FROM ReservaLugar r WHERE r.res_lug_id = :res_lug_id")
     ReservaLugar findByRes_lug_id(@Param("res_lug_id") Long res_lug_id);

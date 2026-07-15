@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
     name = "gym-persona-api", 
     url = "http://localhost:3003", 
     configuration = CustomErrorDecoder.class,
-    fallback = PersonaClientFallback.class // Ya no necesita el prefijo "PersonaClient."
+    fallback = PersonaClientFallback.class
 )
 public interface PersonaClient {
-    @GetMapping("/api/personas/{id}") 
+    
+    @GetMapping("/api/personas/{id}")
     PersonaResponse obtenerPersona(@PathVariable("id") Long id);
+    
 }

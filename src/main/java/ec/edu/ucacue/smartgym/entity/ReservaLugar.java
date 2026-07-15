@@ -15,8 +15,8 @@ public class ReservaLugar {
     @Column(name = "res_lug_id")
     private Long res_lug_id;
 
-    @Column(name = "usu_id")
-    private Long usu_id;
+    @Column(name = "per_id") // Cambiado a per_id
+    private Long per_id;     // Cambiado a per_id
 
     @Column(name = "lug_id")
     private Long lug_id;
