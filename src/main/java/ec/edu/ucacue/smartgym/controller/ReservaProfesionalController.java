@@ -24,4 +24,6 @@ public class ReservaProfesionalController {
     public ResponseEntity<List<ReservaProfesionalResponse>> listarPorUsuario(@PathVariable Long usu_id) {
         return ResponseEntity.ok(service.listarPorUsuario(usu_id));
     }
+
+
 }

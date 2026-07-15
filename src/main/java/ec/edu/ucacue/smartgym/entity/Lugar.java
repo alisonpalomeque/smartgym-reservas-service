@@ -10,10 +10,9 @@ import java.time.LocalDate;
 @Getter @Setter
 @NoArgsConstructor 
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true) // <--- Agrega esto
 public class Lugar {
-
-   @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lug_id;
 
@@ -25,5 +24,4 @@ public class Lugar {
     private LocalTime lug_hora_inicio;
     private LocalTime lug_hora_fin;
     private Integer lug_cupos_disponibles;
-    
 }

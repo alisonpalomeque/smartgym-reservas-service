@@ -32,26 +32,36 @@ public class LugarServiceImpl implements LugarService {
         
         return mapearADto(entidad);
     }
-    @Override
-public LugarResponse crearLugar(LugarRequest request) {
-    // 1. Convertir el DTO Request a Entidad
-    Lugar lugar = new Lugar();
-    lugar.setLug_nombre(request.getLug_nombre());
-    lugar.setLug_cupos_disponibles(request.getLug_cupos_totales());
-    // ... asigna el resto de campos que tengas en tu entidad ...
+        @Override
+    public LugarResponse crearLugar(LugarRequest request) {
+        // Aquí es donde ocurre el fallo: debes asignar cada campo del 'request' a la 'entidad'
+        Lugar lugar = Lugar.builder()
+                .lug_nombre(request.getLug_nombre())
+                .lug_descripcion(request.getLug_descripcion())
+                .lug_capacidad(request.getLug_capacidad())
+                .lug_estado(request.getLug_estado())
+                .lug_dia_disponibles(request.getLug_dia_disponibles())
+                .lug_hora_inicio(request.getLug_hora_inicio())
+                .lug_hora_fin(request.getLug_hora_fin())
+                .lug_cupos_disponibles(request.getLug_cupos_disponibles()) // ¡Este faltaba!
+                .build();
 
-    // 2. Guardar en BD usando el repositorio
-    Lugar guardado = lugarRepository.save(lugar);
-
-    // 3. Convertir la entidad guardada a Response y retornar
-    return mapearADto(guardado);
-   }
+        Lugar guardado = lugarRepository.save(lugar);
+        return mapearADto(guardado);
+    }
 
     private LugarResponse mapearADto(Lugar lugar) {
-        return LugarResponse.builder()
-                .lug_id(lugar.getLug_id())
-                .lug_nombre(lugar.getLug_nombre())
-                .lug_cupos_disponibles(lugar.getLug_cupos_disponibles())
-                .build();
-    }
+    return LugarResponse.builder()
+            .lug_id(lugar.getLug_id())
+            .lug_nombre(lugar.getLug_nombre())
+            // Asegúrate de que el nombre aquí coincida exactamente con el de la entidad
+            .lug_descripcion(lugar.getLug_descripcion()) 
+            .lug_capacidad(lugar.getLug_capacidad())
+            .lug_estado(lugar.getLug_estado())
+            .lug_dia_disponibles(lugar.getLug_dia_disponibles())
+            .lug_hora_inicio(lugar.getLug_hora_inicio())
+            .lug_hora_fin(lugar.getLug_hora_fin())
+            .lug_cupos_disponibles(lugar.getLug_cupos_disponibles())
+            .build();
+}
 }

@@ -23,14 +23,20 @@ public class ReservaLugarController {
 
     }
    
-@GetMapping("/{id}")
-public ResponseEntity<ReservaLugarResponse> obtenerPorId(@PathVariable Long id) {
-    return ResponseEntity.ok(service.buscarPorId(id));
-}
+   @Autowired
+    private ReservaLugarService reservaLugarService;
 
+  
+    @GetMapping("/{id}")
+    public ReservaLugarResponse buscarPorId(@PathVariable Long id) {
+        return reservaLugarService.buscarPorId(id);
+    }
+
+    
     @GetMapping
-public ResponseEntity<List<ReservaLugarResponse>> listarReservas() {
-    return ResponseEntity.ok(service.listarTodas());
-}
+    public List<ReservaLugarResponse> listarTodas() {
+        return reservaLugarService.listarTodas();
+    }
 
+    
 }
