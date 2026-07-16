@@ -9,7 +9,7 @@ import java.util.List;
 import ec.edu.ucacue.smartgym.dto.HorarioProfesionalRequest;
 
 @RestController
-@RequestMapping("/api/horarios")
+@RequestMapping("/api/reservas/horarios")
 public class HorarioProfesionalController {
 
     @Autowired

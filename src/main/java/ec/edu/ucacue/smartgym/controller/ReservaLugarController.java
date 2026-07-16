@@ -10,7 +10,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 
 @RestController
-@RequestMapping("/api/reservas-lugar")
+@RequestMapping("/api/reservas/lugar")
 public class ReservaLugarController {
 
     @Autowired

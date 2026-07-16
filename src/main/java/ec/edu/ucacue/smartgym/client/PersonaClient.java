@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
     name = "gym-persona-api", 
-    url = "http://localhost:3003", 
+    url = "${persona-service.url}", 
     configuration = CustomErrorDecoder.class,
     fallback = PersonaClientFallback.class
 )
