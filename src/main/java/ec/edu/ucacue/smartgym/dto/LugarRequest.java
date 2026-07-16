@@ -13,5 +13,6 @@ public class LugarRequest {
     private LocalDate lug_dia_disponibles;
     private LocalTime lug_hora_inicio;
     private LocalTime lug_hora_fin;
+    private String lug_imagen_url;
     private Integer lug_cupos_disponibles; // Cambiado a 'disponibles' para que coincida
 }

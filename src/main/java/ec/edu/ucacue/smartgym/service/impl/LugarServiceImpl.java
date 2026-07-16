@@ -44,6 +44,7 @@ public class LugarServiceImpl implements LugarService {
                 .lug_hora_inicio(request.getLug_hora_inicio())
                 .lug_hora_fin(request.getLug_hora_fin())
                 .lug_cupos_disponibles(request.getLug_cupos_disponibles()) // ¡Este faltaba!
+                .lug_imagen_url(request.getLug_imagen_url()) // Asegúrate de que este campo exista en la entidad
                 .build();
 
         Lugar guardado = lugarRepository.save(lugar);
@@ -62,6 +63,8 @@ public class LugarServiceImpl implements LugarService {
             .lug_hora_inicio(lugar.getLug_hora_inicio())
             .lug_hora_fin(lugar.getLug_hora_fin())
             .lug_cupos_disponibles(lugar.getLug_cupos_disponibles())
+            .lug_imagen_url(lugar.getLug_imagen_url()) // Asegúrate de que este campo exista en la entidad
             .build();
 }
+
 }

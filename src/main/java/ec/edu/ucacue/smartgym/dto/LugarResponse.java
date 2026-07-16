@@ -17,4 +17,5 @@ public class LugarResponse {
     private LocalTime lug_hora_inicio;
     private LocalTime lug_hora_fin;
     private Integer lug_cupos_disponibles;
+    private String lug_imagen_url;
 }
