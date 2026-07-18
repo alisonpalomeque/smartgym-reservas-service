@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 public class ReservaProfesionalRequest {
     private Long profesional_id;
-    private Long entrenador_id;
     private Long usuario_id;
     private LocalDateTime fecha_reserva;
     private String res_comentario; 

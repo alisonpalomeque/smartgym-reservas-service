@@ -22,8 +22,7 @@ public class ReservaProfesional {
     @Column(name = "res_pro_id")
     private Long resProId;
 
-    private Long med_usu_id;
-    private Long entId;
+    private Long profesional_id;
     private Long usu_id;
     private LocalDate res_fecha;
     private LocalTime res_hora_inicio;

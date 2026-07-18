@@ -16,13 +16,7 @@ public interface ReservaProfesionalRepository extends JpaRepository<ReservaProfe
     
     @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END " +
        "FROM ReservaProfesional r " +
-       "WHERE r.med_usu_id = :med_usu_id AND r.res_fecha = :res_fecha")
-boolean existsByMed_usu_idAndRes_fecha(@Param("med_usu_id") Long med_usu_id, 
-                                       @Param("res_fecha") LocalDate res_fecha);
-
-    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END " +
-       "FROM ReservaProfesional r " +
-       "WHERE r.entId = :entId AND r.res_fecha = :res_fecha")
-boolean existsByEntIdAndRes_fecha(@Param("entId") Long entId,
-                                  @Param("res_fecha") LocalDate res_fecha);
+       "WHERE r.profesional_id = :profesional_id AND r.res_fecha = :res_fecha")
+boolean existsByProfesional_idAndRes_fecha(@Param("profesional_id") Long profesional_id,
+                                           @Param("res_fecha") LocalDate res_fecha);
 }
