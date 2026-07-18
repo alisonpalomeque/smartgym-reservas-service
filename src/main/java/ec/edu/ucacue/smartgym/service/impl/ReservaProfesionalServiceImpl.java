@@ -1,12 +1,14 @@
 package ec.edu.ucacue.smartgym.service.impl;
 
+import ec.edu.ucacue.smartgym.dto.PersonaResponse;
 import ec.edu.ucacue.smartgym.dto.ReservaProfesionalRequest;
 import ec.edu.ucacue.smartgym.dto.ReservaProfesionalResponse;
 import ec.edu.ucacue.smartgym.entity.ReservaProfesional;
 import ec.edu.ucacue.smartgym.enums.EstadoReserva;
 import ec.edu.ucacue.smartgym.repository.ReservaProfesionalRepository;
 import ec.edu.ucacue.smartgym.service.ReservaProfesionalService;
-import org.springframework.beans.factory.annotation.Autowired;
+import ec.edu.ucacue.smartgym.client.PersonaClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,10 +16,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ReservaProfesionalServiceImpl implements ReservaProfesionalService {
 
-    @Autowired
-    private ReservaProfesionalRepository repository;
+    private final ReservaProfesionalRepository repository;
+    private final PersonaClient personaClient;
 
     @Override
     public ReservaProfesionalResponse crearReserva(ReservaProfesionalRequest request) {
@@ -60,13 +63,22 @@ public class ReservaProfesionalServiceImpl implements ReservaProfesionalService 
     @Override
     public List<ReservaProfesionalResponse> listarPorUsuario(Long usu_id) {
         return repository.findByUsu_id(usu_id).stream()
-                .map(r -> ReservaProfesionalResponse.builder()
-                        .res_prof_id(r.getResProId())
-                        .profesional_id(r.getProfesional_id())
-                        .usu_id(r.getUsu_id())
-                        .fecha_reserva(r.getRes_fecha().atStartOfDay())
-                        .mensaje("Reserva encontrada")
-                        .build())
+                .map(r -> {
+                    PersonaResponse persona = personaClient.obtenerPersona(r.getProfesional_id());
+                    return ReservaProfesionalResponse.builder()
+                            .res_prof_id(r.getResProId())
+                            .profesional_id(r.getProfesional_id())
+                            .usu_id(r.getUsu_id())
+                            .profesional_nombre(persona != null ? persona.getPer_nombres() : null)
+                            .fecha_reserva(r.getRes_fecha().atStartOfDay())
+                            .res_hora_inicio(r.getRes_hora_inicio())
+                            .res_hora_fin(r.getRes_hora_fin())
+                            .res_tipo(r.getRes_tipo())
+                            .res_estado(r.getRes_estado())
+                            .res_comentario(r.getRes_comentario())
+                            .mensaje("Reserva encontrada")
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
 }
