@@ -23,6 +23,7 @@ public class ReservaProfesional {
     private Long resProId;
 
     private Long med_usu_id;
+    private Long entId;
     private Long usu_id;
     private LocalDate res_fecha;
     private LocalTime res_hora_inicio;

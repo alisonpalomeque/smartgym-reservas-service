@@ -4,6 +4,7 @@ import ec.edu.ucacue.smartgym.dto.ReservaProfesionalRequest;
 import ec.edu.ucacue.smartgym.dto.ReservaProfesionalResponse;
 import ec.edu.ucacue.smartgym.entity.ReservaProfesional;
 import ec.edu.ucacue.smartgym.enums.EstadoReserva;
+import ec.edu.ucacue.smartgym.enums.TipoReserva;
 import ec.edu.ucacue.smartgym.repository.ReservaProfesionalRepository;
 import ec.edu.ucacue.smartgym.service.ReservaProfesionalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,21 @@ public class ReservaProfesionalServiceImpl implements ReservaProfesionalService 
             throw new RuntimeException("Error: No se puede reservar en una fecha pasada.");
         }
 
-        // 2. VALIDACIÓN: Evitar que el profesional tenga dos reservas el mismo día
-        // Asegúrate de tener este método en tu Repositorio
-        boolean ocupado = repository.existsByMed_usu_idAndRes_fecha(
-                request.getProfesional_id(), 
-                request.getFecha_reserva().toLocalDate()
-        );
+        // 2. VALIDACIÓN: Evitar que el profesional/entrenador tenga dos reservas el mismo día
+        boolean ocupado;
+        if (request.getRes_tipo() == TipoReserva.CONSULTA 
+                || request.getRes_tipo() == TipoReserva.NUTRICION 
+                || request.getRes_tipo() == TipoReserva.FISIOTERAPIA) {
+            ocupado = repository.existsByMed_usu_idAndRes_fecha(
+                    request.getProfesional_id(), 
+                    request.getFecha_reserva().toLocalDate()
+            );
+        } else {
+            ocupado = repository.existsByEntIdAndRes_fecha(
+                    request.getEntrenador_id(), 
+                    request.getFecha_reserva().toLocalDate()
+            );
+        }
         
         if (ocupado) {
             throw new RuntimeException("Error: El profesional ya tiene una reserva asignada para este día.");
@@ -39,7 +49,13 @@ public class ReservaProfesionalServiceImpl implements ReservaProfesionalService 
 
         // 3. Creación y guardado
         ReservaProfesional reserva = new ReservaProfesional();
-        reserva.setMed_usu_id(request.getProfesional_id());
+        if (request.getRes_tipo() == TipoReserva.CONSULTA 
+                || request.getRes_tipo() == TipoReserva.NUTRICION 
+                || request.getRes_tipo() == TipoReserva.FISIOTERAPIA) {
+            reserva.setMed_usu_id(request.getProfesional_id());
+        } else {
+            reserva.setEntId(request.getEntrenador_id());
+        }
         reserva.setUsu_id(request.getUsuario_id());
         reserva.setRes_fecha(request.getFecha_reserva().toLocalDate());
         reserva.setRes_comentario(request.getRes_comentario());
@@ -64,6 +80,7 @@ public class ReservaProfesionalServiceImpl implements ReservaProfesionalService 
                 .map(r -> ReservaProfesionalResponse.builder()
                         .res_prof_id(r.getResProId())
                         .usu_id(r.getUsu_id())
+                        .entId(r.getEntId())
                         .fecha_reserva(r.getRes_fecha().atStartOfDay())
                         .mensaje("Reserva encontrada")
                         .build())
