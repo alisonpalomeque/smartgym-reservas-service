@@ -11,4 +11,5 @@ import lombok.AllArgsConstructor;
 public class PersonaResponse {
     private Long per_id;
     private String per_nombres;
+    private String per_apellidos;
 }

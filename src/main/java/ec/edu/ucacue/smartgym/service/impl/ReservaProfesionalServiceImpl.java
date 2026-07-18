@@ -64,12 +64,20 @@ public class ReservaProfesionalServiceImpl implements ReservaProfesionalService 
     public List<ReservaProfesionalResponse> listarPorUsuario(Long usu_id) {
         return repository.findByUsu_id(usu_id).stream()
                 .map(r -> {
-                    PersonaResponse persona = personaClient.obtenerPersona(r.getProfesional_id());
+                    String nombre = "Desconocido";
+                    try {
+                        PersonaResponse persona = personaClient.obtenerPersona(r.getProfesional_id());
+                        if (persona != null && persona.getPer_nombres() != null) {
+                            nombre = persona.getPer_nombres() + " " + (persona.getPer_apellidos() != null ? persona.getPer_apellidos() : "");
+                        }
+                    } catch (Exception e) {
+                        // Servicio no disponible, nombre queda "Desconocido"
+                    }
                     return ReservaProfesionalResponse.builder()
                             .res_prof_id(r.getResProId())
                             .profesional_id(r.getProfesional_id())
                             .usu_id(r.getUsu_id())
-                            .profesional_nombre(persona != null ? persona.getPer_nombres() : null)
+                            .profesional_nombre(nombre)
                             .fecha_reserva(r.getRes_fecha().atStartOfDay())
                             .res_hora_inicio(r.getRes_hora_inicio())
                             .res_hora_fin(r.getRes_hora_fin())
