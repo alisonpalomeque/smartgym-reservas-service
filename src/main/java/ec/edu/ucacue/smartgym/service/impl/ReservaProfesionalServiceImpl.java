@@ -29,19 +29,26 @@ public class ReservaProfesionalServiceImpl implements ReservaProfesionalService 
             throw new RuntimeException("Error: No se puede reservar en una fecha pasada.");
         }
 
-        // 2. VALIDACIÓN: Evitar que el profesional tenga dos reservas el mismo día
-        boolean ocupado = repository.existsByProfesional_idAndRes_fecha(
-                request.getProfesional_id(), 
-                request.getFecha_reserva().toLocalDate()
+        // 2. VALIDACIÓN: Evitar solapamiento de horarios con otra reserva del mismo profesional
+        boolean ocupado = repository.existsSolapamiento(
+                request.getProfesional_id(),
+                request.getFecha_reserva().toLocalDate(),
+                request.getFecha_reserva().toLocalTime(),
+                request.getRes_hora_fin()
         );
         
         if (ocupado) {
-            throw new RuntimeException("Error: El profesional ya tiene una reserva asignada para este día.");
+            throw new RuntimeException("Error: El profesional ya tiene una reserva en ese horario.");
         }
 
         // 3. Creación y guardado
+        
+       // Servicio no disponible, nombre queda "Desconocido"
+        
+
         ReservaProfesional reserva = new ReservaProfesional();
         reserva.setProfesional_id(request.getProfesional_id());
+        reserva.setProfesional_nombre(request.getProfesional_nombre());
         reserva.setUsu_id(request.getUsuario_id());
         reserva.setRes_fecha(request.getFecha_reserva().toLocalDate());
         reserva.setRes_comentario(request.getRes_comentario());
@@ -54,8 +61,15 @@ public class ReservaProfesionalServiceImpl implements ReservaProfesionalService 
 
         return ReservaProfesionalResponse.builder()
                 .res_prof_id(guardada.getResProId())
+                .profesional_id(guardada.getProfesional_id())
+                .profesional_nombre(guardada.getProfesional_nombre())
                 .usu_id(guardada.getUsu_id())
                 .fecha_reserva(guardada.getRes_fecha().atStartOfDay())
+                .res_hora_inicio(guardada.getRes_hora_inicio())
+                .res_hora_fin(guardada.getRes_hora_fin())
+                .res_tipo(guardada.getRes_tipo())
+                .res_estado(guardada.getRes_estado())
+                .res_comentario(guardada.getRes_comentario())
                 .mensaje("Reserva creada con éxito")
                 .build();
     }
@@ -64,14 +78,17 @@ public class ReservaProfesionalServiceImpl implements ReservaProfesionalService 
     public List<ReservaProfesionalResponse> listarPorUsuario(Long usu_id) {
         return repository.findByUsu_id(usu_id).stream()
                 .map(r -> {
-                    String nombre = "Desconocido";
-                    try {
-                        PersonaResponse persona = personaClient.obtenerPersona(r.getProfesional_id());
-                        if (persona != null && persona.getPer_nombres() != null) {
-                            nombre = persona.getPer_nombres() + " " + (persona.getPer_apellidos() != null ? persona.getPer_apellidos() : "");
+                    String nombre = r.getProfesional_nombre();
+                    if (nombre == null || nombre.isBlank()) {
+                        nombre = "Desconocido";
+                        try {
+                            PersonaResponse persona = personaClient.obtenerPersona(r.getProfesional_id());
+                            if (persona != null && persona.getPer_nombres() != null) {
+                                nombre = persona.getPer_nombres() + " " + (persona.getPer_apellidos() != null ? persona.getPer_apellidos() : "");
+                            }
+                        } catch (Exception e) {
+                            // Servicio no disponible, nombre queda "Desconocido"
                         }
-                    } catch (Exception e) {
-                        // Servicio no disponible, nombre queda "Desconocido"
                     }
                     return ReservaProfesionalResponse.builder()
                             .res_prof_id(r.getResProId())
