@@ -25,6 +25,9 @@ public class ReservaLugar {
     @Column(name = "res_lug_estado")
     private EstadoReserva res_lug_estado;
 
+    @Column(name = "res_lug_cantidad")
+    private Integer res_lug_cantidad;
+
     @Column(name = "res_lug_fecha_creacion")
     private LocalDateTime res_lug_fecha_creacion;
 }

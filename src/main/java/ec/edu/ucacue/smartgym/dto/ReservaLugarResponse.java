@@ -11,6 +11,7 @@ public class ReservaLugarResponse {
     private Long res_lug_id;
     private Long per_id; // CAMBIADO: aquí estaba usu_id
     private Long lug_id;
+    private Integer res_lug_cantidad;
     private EstadoReserva res_lug_estado;
     private LocalDateTime res_lug_fecha_creacion;
     private String mensaje;

@@ -34,7 +34,12 @@ public class ReservaLugarServiceImpl implements ReservaLugarService {
             throw new RuntimeException("per_id y lug_id son obligatorios");
         }
 
-        // 2. Validar persona usando per_id
+        // 2. Validar cantidad
+        if (request.getRes_lug_cantidad() == null || request.getRes_lug_cantidad() <= 0) {
+            throw new RuntimeException("La cantidad de cupos debe ser mayor a 0");
+        }
+
+        // 3. Validar persona usando per_id
         PersonaResponse persona = personaClient.obtenerPersona(request.getPer_id());
         if (persona == null) {
             throw new RuntimeException("No existe persona con ID: " + request.getPer_id());
@@ -43,17 +48,20 @@ public class ReservaLugarServiceImpl implements ReservaLugarService {
         Lugar lugar = lugarRepository.findById(request.getLug_id())
                 .orElseThrow(() -> new RuntimeException("Lugar no encontrado: " + request.getLug_id()));
 
-        if (lugar.getLug_cupos_disponibles() <= 0) {
-            throw new RuntimeException("Sin cupos en: " + lugar.getLug_nombre());
+        if (lugar.getLug_cupos_disponibles() < request.getRes_lug_cantidad()) {
+            throw new RuntimeException("Cupos insuficientes en: " + lugar.getLug_nombre()
+                    + ". Disponibles: " + lugar.getLug_cupos_disponibles()
+                    + ", solicitados: " + request.getRes_lug_cantidad());
         }
 
-        lugar.setLug_cupos_disponibles(lugar.getLug_cupos_disponibles() - 1);
+        lugar.setLug_cupos_disponibles(lugar.getLug_cupos_disponibles() - request.getRes_lug_cantidad());
         lugarRepository.save(lugar);
 
-        // 3. Guardar reserva usando per_id
+        // 4. Guardar reserva usando per_id
         ReservaLugar reserva = ReservaLugar.builder()
                 .per_id(request.getPer_id())
                 .lug_id(request.getLug_id())
+                .res_lug_cantidad(request.getRes_lug_cantidad())
                 .res_lug_estado(EstadoReserva.PENDIENTE)
                 .res_lug_fecha_creacion(LocalDateTime.now())
                 .build();
@@ -64,6 +72,7 @@ public class ReservaLugarServiceImpl implements ReservaLugarService {
                 .res_lug_id(saved.getRes_lug_id())
                 .per_id(saved.getPer_id())
                 .lug_id(saved.getLug_id())
+                .res_lug_cantidad(saved.getRes_lug_cantidad())
                 .res_lug_estado(saved.getRes_lug_estado())
                 .res_lug_fecha_creacion(saved.getRes_lug_fecha_creacion())
                 .persona(persona)
@@ -82,6 +91,7 @@ public class ReservaLugarServiceImpl implements ReservaLugarService {
             .res_lug_id(reserva.getRes_lug_id())
             .per_id(reserva.getPer_id())
             .lug_id(reserva.getLug_id())
+            .res_lug_cantidad(reserva.getRes_lug_cantidad())
             .res_lug_estado(reserva.getRes_lug_estado())
             .res_lug_fecha_creacion(reserva.getRes_lug_fecha_creacion())
             .persona(persona)
@@ -93,11 +103,12 @@ public List<ReservaLugarResponse> listarTodas() {
     return reservaRepository.findAll().stream()
         .map(reserva -> ReservaLugarResponse.builder()
             .res_lug_id(reserva.getRes_lug_id())
-            .per_id(reserva.getPer_id()) // Cambiado a per_id
+            .per_id(reserva.getPer_id())
             .lug_id(reserva.getLug_id())
+            .res_lug_cantidad(reserva.getRes_lug_cantidad())
             .res_lug_estado(reserva.getRes_lug_estado())
             .res_lug_fecha_creacion(reserva.getRes_lug_fecha_creacion())
-            .persona(personaClient.obtenerPersona(reserva.getPer_id())) // Cambiado a per_id
+            .persona(personaClient.obtenerPersona(reserva.getPer_id()))
             .build())
         .collect(Collectors.toList());
 }
