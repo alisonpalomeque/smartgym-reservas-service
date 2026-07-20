@@ -11,4 +11,8 @@ public interface LugarService {
     // Método para obtener un lugar específico por su ID
     LugarResponse obtenerPorId(Long id);
     LugarResponse crearLugar(LugarRequest request);
+
+    LugarResponse actualizarLugar(Long id, LugarRequest request);
+
+    void eliminarLugar(Long id);
 }

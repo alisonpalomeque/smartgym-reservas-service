@@ -51,6 +51,35 @@ public class LugarServiceImpl implements LugarService {
         return mapearADto(guardado);
     }
 
+    @Override
+    public LugarResponse actualizarLugar(Long id, LugarRequest request) {
+        Lugar existente = lugarRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lugar no encontrado con ID: " + id));
+
+        Lugar actualizado = existente.toBuilder()
+                .lug_nombre(request.getLug_nombre())
+                .lug_descripcion(request.getLug_descripcion())
+                .lug_capacidad(request.getLug_capacidad())
+                .lug_estado(request.getLug_estado())
+                .lug_dia_disponibles(request.getLug_dia_disponibles())
+                .lug_hora_inicio(request.getLug_hora_inicio())
+                .lug_hora_fin(request.getLug_hora_fin())
+                .lug_cupos_disponibles(request.getLug_cupos_disponibles())
+                .lug_imagen_url(request.getLug_imagen_url())
+                .build();
+
+        Lugar guardado = lugarRepository.save(actualizado);
+        return mapearADto(guardado);
+    }
+
+    @Override
+    public void eliminarLugar(Long id) {
+        if (!lugarRepository.existsById(id)) {
+            throw new RuntimeException("Lugar no encontrado con ID: " + id);
+        }
+        lugarRepository.deleteById(id);
+    }
+
     private LugarResponse mapearADto(Lugar lugar) {
     return LugarResponse.builder()
             .lug_id(lugar.getLug_id())

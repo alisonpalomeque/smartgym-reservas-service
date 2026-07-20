@@ -39,4 +39,15 @@ public ResponseEntity<LugarResponse> crear(@Valid @RequestBody LugarRequest requ
                          
 }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<LugarResponse> actualizar(@PathVariable Long id, @Valid @RequestBody LugarRequest request) {
+        return ResponseEntity.ok(service.actualizarLugar(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        service.eliminarLugar(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
